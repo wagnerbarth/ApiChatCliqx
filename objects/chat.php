@@ -5,6 +5,7 @@ class Chat{
     // conexão com banco de dados e definição de tabelas
     private $conn;
     private $table_name = "chat";
+    private $table_name2 = "users";
  
     // propriedades do objeto
     public $id;
@@ -18,7 +19,7 @@ class Chat{
         $this->conn = $db;
     }
     
-    // lê usuários
+    // lê mensagem
     function verificarMensagem(){ 
         // query que carrega mensagem
         $query =    "SELECT
@@ -103,6 +104,80 @@ class Chat{
 
         return false;
     }
+
+    // verificar lopgin
+    function verificarLogin(){ 
+        // query que carrega mensagem
+        $query =    "SELECT
+                       c.nome
+                    FROM
+                        " . $this->table_name2 . " c
+                    WHERE
+                        c.email=? AND c.senha=?
+                    ";
+
+        // prepara query statement
+        $stmt = $this->conn->prepare( $query );
+
+        // atualiza o usuário a ser pesquisado 
+        $stmt->bindParam(1, $this->email);
+        $stmt->bindParam(2, $this->senha);
+
+        // executa a query
+        $stmt->execute();
+
+        // obtem o registro 
+        
+        $result = $stmt->fetch();
+
+        return $result;
+
+
+
+        // define os valores dos atributos
+        /* $this->id = $row['id'];
+        $this->origem = $row['origem'];
+        $this->destino = $row['destino'];
+        $this->mensagem = $row['mensagem']; */
+       /*  $this->data = $row['data']; */
+    }
     
+    // receber usuarios
+    function receberUsuarios(){ 
+        // query que carrega mensagem
+        $query =    "SELECT
+                        c.nome
+                    FROM
+                        " . $this->table_name2 . " c
+                    ";
+
+        // prepara query statement
+        $stmt = $this->conn->prepare( $query );
+
+        // atualiza o usuário a ser pesquisado 
+        /* $stmt->bindParam(1, $this->origem);
+        $stmt->bindParam(2, $this->destino);
+        $stmt->bindParam(3, $this->destino);
+        $stmt->bindParam(4, $this->origem);
+ */
+
+        // executa a query
+        $stmt->execute();
+
+        // obtem o registro 
+        
+        $result = $stmt->fetchAll();
+
+        return $result;
+
+
+
+        // define os valores dos atributos
+        /* $this->id = $row['id'];
+        $this->origem = $row['origem'];
+        $this->destino = $row['destino'];
+        $this->mensagem = $row['mensagem']; */
+       /*  $this->data = $row['data']; */
+    }
 }
 
